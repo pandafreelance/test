@@ -18,7 +18,7 @@ class MainApp(MDApp):
                              )
         self.face_cascade = cv2.CascadeClassifier('PanneauDetectionV7.xml')
         # Load TFLite model and allocate tensors.
-        self.interpreter = tf.lite.Interpreter(model_path="./DetectionPanneauxV13.tflite")
+        self.interpreter = tf.lite.Interpreter(model_path="./DetectionPanneauxV4.tflite")
         self.interpreter.allocate_tensors()
         # Get input and output tensors.
         self.input_details = self.interpreter.get_input_details()
@@ -66,9 +66,9 @@ class MainApp(MDApp):
             print("face")
             x, y, w, h = object
             panneau_img = gray[y:y+h, x:x+w]
-            panneau_img1 = cv2.resize(panneau_img, (224, 224))
+            panneau_img1 = cv2.resize(panneau_img, (35, 35))
             panneau_img = cv2.resize(panneau_img, (35, 35))
-            panneau_img1 = self.interpolationVoision(panneau_img1, 224, 224)
+            panneau_img1 = self.interpolationVoision(panneau_img1, 35, 35)
             panneau_img1 = np.array(panneau_img1, dtype=np.float32)
             panneau_img1 = np.expand_dims(panneau_img1, axis=0)
             panneau_img = self.interpolationVoision(panneau_img, 35, 35)
@@ -79,9 +79,8 @@ class MainApp(MDApp):
             self.interpreter.set_tensor(self.input_details[0]['index'], panneau_img1)
             self.interpreter.invoke()
             output_data = self.interpreter.get_tensor(self.output_details[0]['index'])
-            choix = np.argmax(output_data)
-            print(choix)
-            if choix >0.6:
+            choix = output_data
+            if choix >0.8:
                 self.interpreter1.set_tensor(self.input_details1[0]['index'], panneau_img)
                 self.interpreter1.invoke()
                 output_data1 = self.interpreter1.get_tensor(self.output_details1[0]['index'])
