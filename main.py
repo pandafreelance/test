@@ -16,9 +16,9 @@ class MainApp(MDApp):
         layout = MDBoxLayout(orientation="vertical",
                              md_bg_color="#2c3e50"
                              )
-        self.face_cascade = cv2.CascadeClassifier('PanneauDetectionV7.xml')
+        self.face_cascade = cv2.CascadeClassifier('./assets/PanneauDetectionV7.xml')
         # Load TFLite model and allocate tensors.
-        self.interpreter = tf.lite.Interpreter(model_path="./DetectionPanneauxV4.tflite")
+        self.interpreter = tf.lite.Interpreter(model_path="./assets/DetectionPanneauxV4.tflite")
         self.interpreter.allocate_tensors()
         # Get input and output tensors.
         self.input_details = self.interpreter.get_input_details()
@@ -33,7 +33,7 @@ class MainApp(MDApp):
             md_bg_color="#e67e22"
         ))
 
-        self.interpreter1 = tf.lite.Interpreter(model_path="./ReconnaissancePanneauxSans43V8.tflite")
+        self.interpreter1 = tf.lite.Interpreter(model_path="./assets/ReconnaissancePanneauxSans43V8.tflite")
         self.interpreter1.allocate_tensors()
         # Get input and output tensors.
         self.input_details1 = self.interpreter1.get_input_details()
